@@ -56,7 +56,7 @@ static void	handle_sort_3_cases(t_list **stack_a, t_list *head, int min,
 	}
 }
 
-static void	sort_3(t_list **stack_a)
+void	sort_3(t_list **stack_a)
 {
 	t_list	*head;
 	int		min;
@@ -70,7 +70,7 @@ static void	sort_3(t_list **stack_a)
 	handle_sort_3_cases(stack_a, head, min, next_min);
 }
 
-static void	sort_4(t_list **stack_a, t_list **stack_b)
+void	sort_4(t_list **stack_a, t_list **stack_b)
 {
 	int	distance;
 
@@ -117,24 +117,4 @@ void	sort_5(t_list **stack_a, t_list **stack_b)
 	pb(stack_a, stack_b);
 	sort_4(stack_a, stack_b);
 	pa(stack_a, stack_b);
-}
-
-void	simple_sort(t_list **stack_a, t_list **stack_b)
-{
-	int	size;
-
-	if (is_sorted(stack_a) || ft_lstsize(*stack_a) == 0
-		|| ft_lstsize(*stack_a) == 1)
-		return ;
-	size = ft_lstsize(*stack_a);
-	if (size == 2)
-		sa(stack_a);
-	else if (size == 3)
-		sort_3(stack_a);
-	else if (size == 4)
-		sort_4(stack_a, stack_b);
-	else if (size == 5)
-		sort_5(stack_a, stack_b);
-	else
-		radix_sort(stack_a, stack_b);
 }

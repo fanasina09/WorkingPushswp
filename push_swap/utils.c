@@ -27,6 +27,7 @@ void	ft_free(char **str)
 		i++;
 	while (i >= 0)
 		free(str[i--]);
+	free(str);
 }
 
 int	is_sorted(t_list **stack)

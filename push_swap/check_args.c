@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faharila <faharila@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainarako <ainarako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/22 08:40:50 by faharila          #+#    #+#             */
-/*   Updated: 2026/04/22 08:40:50 by faharila         ###   ########.fr       */
+/*   Created: 2026/04/24 01:38:35 by ainarako          #+#    #+#             */
+/*   Updated: 2026/04/24 01:38:35 by ainarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,56 +40,50 @@ static int	ft_isnum(char *num)
 	return (1);
 }
 
+static void	validate_arg(char *arg, char **args, int index, int should_free)
+{
+	long	tmp;
+
+	tmp = ft_atoi(arg);
+	if (!ft_isnum(arg) || ft_contains(tmp, args, index)
+		|| tmp < -2147483648 || tmp > 2147483647)
+	{
+		if (should_free)
+			ft_free(args);
+		ft_error();
+	}
+}
+
+static char	**prepare_args(int argc, char **argv, int *start, int *should_free)
+{
+	if (argc == 2)
+	{
+		*should_free = 1;
+		*start = 0;
+		return (ft_split(argv[1], ' '));
+	}
+	*should_free = 0;
+	*start = 1;
+	return (argv);
+}
+
 void	ft_check_args(int argc, char **argv)
 {
 	int		i;
-	long	tmp;
-	char	**args;	
-
-	if (argc == 2)
-		i = 0;
-	else
-		i = 1;
-	if (argc == 2)
-		args = ft_split(argv[1], ' ');
-	else
-		args = argv;
-	while (args[i])
-	{
-		tmp = ft_atoi(args[i]);
-		if (!ft_isnum(args[i]))
-			ft_error();
-		if (ft_contains(tmp, args, i))
-			ft_error();
-		if (tmp < -2147483648 || tmp > 2147483647)
-			ft_error();
-		i++;
-	}
-	if (argc == 2)
-		ft_free(args);
-}
-
-void	initstack(t_list **stack, int argc, char **argv)
-{
-	t_list	*new;
+	int		should_free;
 	char	**args;
-	int		i;
 
-	if (argc == 2)
-		i = 0;
-	else
-		i = 1;
-	if (argc == 2)
-		args = ft_split(argv[1], ' ');
-	else
-		args = argv;
+	args = prepare_args(argc, argv, &i, &should_free);
+	if (should_free && !args[0])
+	{
+		ft_free(args);
+		ft_error();
+	}
 	while (args[i])
 	{
-		new = ft_lstnew(ft_atoi(args[i]));
-		ft_lstadd_back(stack, new);
+		validate_arg(args[i], args, i, should_free);
 		i++;
 	}
-	index_stack(stack);
-	if (argc == 2)
+	if (should_free)
 		ft_free(args);
 }

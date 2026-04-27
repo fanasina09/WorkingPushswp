@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faharila <faharila@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainarako <ainarako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/22 08:35:33 by faharila          #+#    #+#             */
-/*   Updated: 2026/04/22 08:35:33 by faharila         ###   ########.fr       */
+/*   Created: 2026/04/24 01:38:49 by ainarako          #+#    #+#             */
+/*   Updated: 2026/04/24 01:38:49 by ainarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

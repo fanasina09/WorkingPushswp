@@ -49,3 +49,43 @@ void	index_stack(t_list **stack)
 		head = get_next_min(stack);
 	}
 }
+
+void	free_stack(t_list **stack)
+{
+	t_list	*head;
+	t_list	*tmp;
+
+	head = *stack;
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp);
+	}
+	free(stack);
+}
+
+void	initstack(t_list **stack, int argc, char **argv)
+{
+	t_list	*new;
+	char	**args;
+	int		i;
+
+	if (argc == 2)
+		i = 0;
+	else
+		i = 1;
+	if (argc == 2)
+		args = ft_split(argv[1], ' ');
+	else
+		args = argv;
+	while (args[i])
+	{
+		new = ft_lstnew(ft_atoi(args[i]));
+		ft_lstadd_back(stack, new);
+		i++;
+	}
+	index_stack(stack);
+	if (argc == 2)
+		ft_free(args);
+}

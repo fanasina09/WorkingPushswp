@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bench.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faharila <faharila@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainarako <ainarako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/16 01:06:48 by faharila          #+#    #+#             */
-/*   Updated: 2026/04/18 19:31:00 by faharila         ###   ########.fr       */
+/*   Created: 2026/04/24 01:35:17 by ainarako          #+#    #+#             */
+/*   Updated: 2026/04/24 01:35:20 by ainarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faharila <faharila@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainarako <ainarako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/16 14:01:14 by faharila          #+#    #+#             */
-/*   Updated: 2026/02/16 14:01:17 by faharila         ###   ########.fr       */
+/*   Created: 2026/04/24 01:35:36 by ainarako          #+#    #+#             */
+/*   Updated: 2026/04/24 01:35:38 by ainarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

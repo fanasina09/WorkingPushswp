@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faharila <faharila@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainarako <ainarako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/16 12:24:00 by faharila          #+#    #+#             */
-/*   Updated: 2026/02/16 14:05:39 by faharila         ###   ########.fr       */
+/*   Created: 2026/04/24 01:35:48 by ainarako          #+#    #+#             */
+/*   Updated: 2026/04/24 01:35:50 by ainarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

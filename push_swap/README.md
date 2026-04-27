@@ -1,125 +1,163 @@
-# 42 Push_Swap
+*This project has been created as part of the 42 curriculum by faharila, ainarako.*
 
-Because swap_push isn't as natural
+---
 
-Given a set of integers, sort it using a predefined set of instructions using
-two stacks. The instruction set is defined below. This program outputs a program
-in push_swap instructions that sorts the input integers.
+# push_swap
 
-> ⚠️ **Warning**: Don't copy/paste anything you don't understand: it's bad for you, and for the school.
+## Description
 
-## Instruction set
+`push_swap` is a sorting algorithm project from the 42 school curriculum. The goal is to sort a stack of integers using a limited set of operations on two stacks (`a` and `b`), while minimizing the total number of operations performed.
 
-For the following instructions, if the instruction is not possible, the part of
-it that can't be executed won't.
+The program reads a list of integers as arguments, outputs the sequence of operations needed to sort them in ascending order on stack `a`, and includes a `checker` program that validates whether a given sequence of operations correctly sorts the input.
 
-| Code  | Instruction                         | Action                                                 |
-| ----- | ----------------------------------- | ------------------------------------------------------ |
-| `sa`  | swap a                              | swaps the 2 top elements of stack a                    |
-| `sb`  | swap b                              | swaps the 2 top elements of stack b                    |
-| `ss`  | swap a + swap b                     | both `sa` and `sb`                                     |
-| `pa`  | push a                              | moves the top element of stack b at the top of stack a |
-| `pb`  | push b                              | moves the top element of stack a at the top of stack b |
-| `ra`  | rotate a                            | shifts all elements of stack a from bottom to top      |
-| `rb`  | rotate b                            | shifts all elements of stack b from bottom to top      |
-| `rr`  | rotate a + rotate b                 | both `ra` and `rb`                                     |
-| `rra` | reverse rotate a                    | shifts all elements of stack a from top to bottom      |
-| `rrb` | reverse rotate b                    | shifts all elements of stack b from top to bottom      |
-| `rrr` | reverse rotate a + reverse rotate b | both `rra` and `rrb`                                   |
+### Available Operations
 
-## Algorithm
+| Operation | Effect |
+|-----------|--------|
+| `sa` | Swap the top two elements of stack a |
+| `sb` | Swap the top two elements of stack b |
+| `ss` | `sa` and `sb` simultaneously |
+| `pa` | Push the top element of stack b onto stack a |
+| `pb` | Push the top element of stack a onto stack b |
+| `ra` | Rotate stack a upward (top becomes bottom) |
+| `rb` | Rotate stack b upward |
+| `rr` | `ra` and `rb` simultaneously |
+| `rra` | Reverse rotate stack a (bottom becomes top) |
+| `rrb` | Reverse rotate stack b |
+| `rrr` | `rra` and `rrb` simultaneously |
 
-For the stacks with size less than 6 I wrote a simple sort which can be found in the src folder.
+### Benchmark Mode
 
-In this project I used `Radix` sort as the main algorithm. `Radix` sort is an efficient algorithm to sort non-negative integers
-with time complexity O (n). For example, we can sort following list of integers with this algorithm
+The project includes a built-in benchmark system (`--bench` flag) that measures the number of each operation performed and reports the total operation count along with the strategy used.
 
+---
+
+## Algorithms
+
+Three sorting strategies are implemented, selected based on the size and disorder of the input. An adaptive mode (`--adaptive`) automatically picks the best strategy.
+
+### Simple Sort (`--simple`) — for small inputs (≤ 5 elements)
+
+A hardcoded, case-by-case sorting approach tailored for very small stacks. Because the number of permutations is tiny, it is possible to write optimal decision trees directly without any general-purpose algorithm. This gives the lowest possible operation count for inputs of 2 to 5 elements.
+
+**Justification:** Any general algorithm has overhead (index computation, chunk management, etc.) that becomes wasteful for tiny inputs. Hardcoded decision trees for ≤ 5 elements are provably optimal and extremely fast.
+
+### Medium Sort (`--medium`) — for moderately disordered inputs
+
+A chunk-based insertion sort. The stack is divided into chunks of size `√n`. Elements belonging to each chunk are pushed to stack `b` in order, then pulled back to stack `a` one by one in sorted order.
+
+- Chunk size is computed as `(int)sqrt(size)`, giving a good trade-off between the number of rotations needed to find each target element and the number of push/pull cycles.
+- Within each chunk, elements are located by rotating stack `b` until the target index is at the top, then pushed back to `a`.
+
+**Justification:** Chunk-based approaches reduce the number of rotations compared to naive insertion sort (O(n²)) while being simpler and more cache-friendly than a full radix sort for medium-sized inputs. The `√n` chunk size minimises the worst-case rotation cost per element.
+
+### Radix Sort (`--complex`) — for large or highly disordered inputs
+
+A bitwise radix sort (LSD — Least Significant Bit first). Elements are first mapped to contiguous indices (0, 1, 2, …, n−1) to allow bit-level comparisons. For each bit position, elements whose current bit is `0` are pushed to stack `b`; elements whose bit is `1` stay in (or are rotated through) stack `a`. After processing all bits, the stacks are merged.
+
+**Justification:** Radix sort runs in O(n × k) where k is the number of bits needed to represent n (≈ log₂ n). For large inputs (100–500 elements), this dramatically outperforms comparison-based strategies. It requires no comparisons between elements — only bit reads — making it well suited to the limited push_swap operation set.
+
+### Adaptive Mode (`--adaptive`)
+
+Computes a *disorder score* for the input (a normalized measure of how far the stack is from sorted order) and automatically selects:
+
+- `simple_sort` if disorder < 0.2 (nearly sorted)
+- `medium_sort` if disorder < 0.5 (moderately shuffled)
+- `radix_sort` otherwise (heavily shuffled / large input)
+
+**Justification:** No single algorithm is optimal across all input sizes and disorder levels. The adaptive mode avoids over-engineering small inputs with a heavy radix pass and avoids under-serving large inputs with an O(n²) approach.
+
+---
+
+## Contributions
+
+| Login | Contributions |
+|-------|--------------|
+| `faharila` | Core sorting algorithms (`simple_sort`, `medium_sort`, `radix_sort`), adaptive algorithm (`adaptive.c`), stack operations (push, swap, rotate, reverse-rotate), argument checking and stack initialization, main entry point |
+| `ainarako` | Benchmark system (`bench.h`, `bench.c`, `bench_utils.c`, `bench_p_utils.c`, `bench_r_utils.c`, `bench_s_utils.c`), checker program, Makefile, `get_next_line` integration |
+
+---
+
+## Instructions
+
+### Requirements
+
+- A C compiler (`cc`) with support for C99 or later
+- The `math` library (`-lm`), available on standard POSIX systems
+- GNU Make
+
+### Compilation
+
+```bash
+# Build both push_swap and checker
+make
+
+# Build only push_swap
+make push_swap
+
+# Build only checker
+make checker
+
+# Clean object files
+make clean
+
+# Remove all build artefacts
+make fclean
+
+# Rebuild from scratch
+make re
 ```
-87 487 781 100 101 0 1
+
+### Usage
+
+```bash
+# Sort a list of integers
+./push_swap 5 3 1 4 2
+
+# Use a specific algorithm
+./push_swap --simple 3 1 2
+./push_swap --medium 42 7 13 99 1 55 23
+./push_swap --complex $(shuf -i 1-500 -n 500 | tr '\n' ' ')
+./push_swap --adaptive 8 3 6 1 7 2
+
+# Validate output with checker
+./push_swap 5 3 1 4 2 | ./checker 5 3 1 4 2
+
+# Run benchmark (reports operation counts)
+./push_swap --bench 5 3 1 4 2
+./push_swap --bench --adaptive $(shuf -i 1-100 -n 100 | tr '\n' ' ')
 ```
 
-Imagine there are 10 boxes labeled 0, 1, 2, …, 9
+The `checker` program reads operation instructions from standard input and prints `OK` if the stack ends up sorted, or `KO` otherwise.
 
-Start from the least significant digit (which is the digit in 1’s place), we put each number into the box which its digit corresponds to.
+### Input Constraints
 
-In the example, 87 has 7 in 1’s place, hence we put it in box 7. 487 also has 7 in 1’s place, so it should be placed in box 7 too (right behind 87) … And we repeat this process until every number is in one of the boxes.
+- All arguments must be valid integers within the `int` range.
+- Duplicate values are not allowed.
+- The program exits with an error message on invalid input.
 
-```
-box 0    100    0
-box 1    781    101    1
-box 2
-box 3
-box 4
-box 5
-box 6
-box 7     87    487
-box 8
-box 9
-```
+---
 
-After that, we connect every number according to the order of boxes.
+## Resources
 
-```
-100 0 781 101 1 87 487
-```
+### Official / Academic References
 
-As we can see, the numbers are sorted according to the digit in 1’s place. For those with the same digit in 1’s place, they’re sorted according to their order in the original list.
+- [Wikipedia — Radix sort](https://en.wikipedia.org/wiki/Radix_sort) — Theory and complexity analysis of LSD/MSD radix sort.
+- [Wikipedia — Insertion sort](https://en.wikipedia.org/wiki/Insertion_sort) — Background for the chunk-based medium sort strategy.
+- [Sorting Algorithm Visualizer](https://visualgo.net/en/sorting) — Interactive visualizations for common sorting algorithms.
+- [42 push_swap subject (PDF)](https://cdn.intra.42.fr/pdf/pdf/81152/en.subject.pdf) — Official project specification.
 
-We repeat this procedure n times, whiere n is the number of digits of the largest number in the array
-(In this case 783 => n = 3).
+### Community Guides
 
-After doing it n times and connecting numbers after each cycle we will have array sorted.
+- [push_swap tutorial by Ayoub](https://medium.com/@ayoub.a/push-swap-tutorial-e6ff19f73c4) — A step-by-step walkthrough of common push_swap strategies.
+- [The Turk algorithm explained](https://medium.com/@jamierobertdawson/push-swap-the-least-number-of-moves-with-two-stacks-d1e76a71789a) — One of the most referenced community algorithms for 100/500 element inputs.
 
-### Simplify numbers
+### AI Usage
 
-Instead of dealing with potentially large or negative integers, we assign each number an index based on its relative size. This process is often called "coordinate compression" or "discretization".
+Claude (Anthropic) was used as an assistant during this project for the following tasks:
 
-   For example, if we have [-5, 100, 2, -10], we'd simplify it to [1, 3, 2, 0].
+- **Debugging:** Identifying off-by-one errors in chunk boundary calculations inside `medium.c` and rotation logic in the radix sort.
+- **Code review:** Reviewing the `bench` infrastructure for correctness and suggesting the separation of benchmark counters into dedicated files (`bench_p_utils.c`, `bench_r_utils.c`, `bench_s_utils.c`) for clarity.
+- **Documentation:** Generating this README based on source files and project requirements.
 
-2. Base-2 representation:
-   After simplification, we represent each number in binary (base-2). This allows us to sort using only two stacks, which we'll call A and B.
-
-3. Radix sort adaptation:
-   We perform a radix sort, but instead of using 10 buckets (for base-10), we use 2 stacks (for base-2).
-
-4. Sorting process:
-   - We start from the least significant bit (rightmost) and move towards the most significant bit (leftmost).
-   - For each bit position:
-     - If the bit is 0, we move the number to stack B (pb - push to B).
-     - If the bit is 1, we rotate stack A (ra - rotate A), keeping the number in A.
-   - After processing all numbers for a bit, we move all numbers from B back to A (pa - push to A).
-   - We repeat this process for each bit.
-
-### Performance of the Algorithm
-
-My push_swap sorts
-
-    3 numbers with maximum 3 instructions,
-    4 numbers with maximum 7 instructions,
-    5 numbers with maximum 11 instructions,
-    100 numbers with maximum 1084 instructions => 3 points,
-    500 numbers with maximum 6785 instructions => 4 points.
-
-The algorith is good enought to pass the project. If the Bonus part is also done the project could get more than 105%.
-
-### Bonus
-
-The bonus part is to write a program named checker, which will get as an argument the stack A formatted as a list of integers. Checker will then wait and read instructions on the standard input. Once all the instructions have been read, checker will execute them on the stack received as an argument (After giving the instructions press ctrl + d).
-
-If after executing those instructions, stack a is actually sorted and b is empty, then
-checker must display "OK" else "KO". If checker arguments are invalid it displays Error.
-
-The checker code can be found in the checker.c file in this repository.
-
-## Resources 
-
-You can find some links and books below that might be useful during the project. You can find all the books in resources folder. 
-Note that you do not have to read the books completly but you will find a lot of useful information there.
-
-Books
-
-- [Algorithms](https://github.com/42YerevanProjects/42_Push_Swap/tree/master/resources)
-
-Links
-
-- [Push Swap Tutorial](https://medium.com/nerd-for-tech/push-swap-tutorial-fa746e6aba1e)
+All algorithmic design decisions, implementation, and testing were done by the project authors.

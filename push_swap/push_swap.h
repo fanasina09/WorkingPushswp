@@ -32,7 +32,6 @@ typedef struct s_list
 // Util functions
 t_list	*ft_lstnew(int value);
 t_list	*ft_lstlast(t_list *head);
-void	ft_lstadd_front(t_list **stack, t_list *new);
 void	ft_lstadd_back(t_list **stack, t_list *new);
 int		ft_lstsize(t_list *head);
 
@@ -49,7 +48,10 @@ void	initstack(t_list **stack, int argc, char **argv);
 void	radix_sort(t_list **stack_a, t_list **stack_b);
 void	simple_sort(t_list **stack_a, t_list **stack_b);
 void	medium_sort(t_list **stack_a, t_list **stack_b);
+void	ft_adaptive_algo(t_list **stack_a, t_list **stack_b, t_bench *bench);
 void	index_stack(t_list **stack);
+void	sort_3(t_list **stack_a);
+void	sort_4(t_list **stack_a, t_list **stack_b);
 void	sort_5(t_list **stack_a, t_list **stack_b);
 
 // Instruction functions

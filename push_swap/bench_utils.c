@@ -3,70 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   bench_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faharila <faharila@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainarako <ainarako@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/16 01:06:21 by faharila          #+#    #+#             */
-/*   Updated: 2026/04/22 08:32:37 by faharila         ###   ########.fr       */
+/*   Created: 2026/04/24 01:35:02 by ainarako          #+#    #+#             */
+/*   Updated: 2026/04/24 01:35:04 by ainarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include "bench.h"
-
-void	bench_pa(t_bench *bench)
-{
-	bench->pa++;
-}
-
-void	bench_pb(t_bench *bench)
-{
-	bench->pb++;
-}
-
-void	bench_sa(t_bench *bench)
-{
-	bench->sa++;
-}
-
-void	bench_sb(t_bench *bench)
-{
-	bench->sb++;
-}
-
-void	bench_ss(t_bench *bench)
-{
-	bench->ss++;
-}
-
-void	bench_ra(t_bench *bench)
-{
-	bench -> ra ++;
-}
-
-void	bench_rb(t_bench *bench)
-{
-	bench -> rb ++;
-}
-
-void	bench_rr(t_bench *bench)
-{
-	bench -> rr ++;
-}
-
-void	bench_rra(t_bench *bench)
-{
-	bench->rra++;
-}
-
-void	bench_rrb(t_bench *bench)
-{
-	bench->rrb++;
-}
-
-void	bench_rrr(t_bench *bench)
-{
-	bench->rrr++;
-}
 
 void	init_bench(t_bench *bench)
 {
@@ -147,20 +92,6 @@ void	exec_algo(char *flag, t_list **a, t_list **b, t_bench *bench)
 		medium_sort(a, b);
 	else if (!ft_strcmp(flag, "--complex"))
 		radix_sort(a, b);
-	else
-		radix_sort(a, b);
-}
-
-void	ft_adaptive_algo(t_list **a, t_list **b, t_bench *bench)
-{
-	float	disorder;
-
-	disorder = compute_disorder(a);
-	g_current_bench = bench;
-	if (disorder < 0.2)
-		simple_sort(a, b);
-	else if (disorder < 0.5)
-		medium_sort(a, b);
 	else
 		radix_sort(a, b);
 }

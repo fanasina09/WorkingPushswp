@@ -65,7 +65,8 @@ static int	parse_args(int *argc, char **argv, char **algo_flag)
 		}
 		else if (!ft_strcmp(argv[i], "--simple")
 			|| !ft_strcmp(argv[i], "--medium")
-			|| !ft_strcmp(argv[i], "--complex"))
+			|| !ft_strcmp(argv[i], "--complex")
+			|| !ft_strcmp(argv[i], "--adaptive"))
 		{
 			*algo_flag = argv[i];
 			remove_arg_at_index(argc, argv, i);
@@ -89,6 +90,7 @@ int	main(int argc, char **argv)
 	t_list	**stack_a;
 	t_list	**stack_b;
 	char	*algo_flag;
+	t_bench	bench;
 
 	if (!parse_args(&argc, argv, &algo_flag))
 		return (-1);
@@ -103,6 +105,8 @@ int	main(int argc, char **argv)
 	}
 	if (g_is_bench)
 		run_benchmark(stack_a, stack_b, algo_flag);
+	else if (algo_flag && !ft_strcmp(algo_flag, "--adaptive"))
+		ft_adaptive_algo(stack_a, stack_b, &bench);
 	else
 		sort_stack(stack_a, stack_b, algo_flag);
 	free_stack(stack_a);
